@@ -1,0 +1,12 @@
+<% average_rating = reviews.average(:rating) %>
+<% if average_rating.present? %>
+  <% average_rating.round.times do %>
+    <i class="fas fa-star text-warning"></i>
+  <% end %>
+  <% (5 - average_rating.round).times do %>
+    <i class="far fa-star text-warning"></i>
+  <% end %>
+  <span>(<%= average_rating.round(1) %>/5)</span>
+<% else %>
+  <span class="text-muted">Pas encore noté</span>
+<% end %>

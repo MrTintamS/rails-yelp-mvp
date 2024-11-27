@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <!-- Informations sur le restaurant -->
+  <div class="card shadow border-0 mb-4">
+    <div class="card-body d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="card-title text-primary"><%= @restaurant.name %></h1>
+        <p class="card-text"><strong>Adresse :</strong> <%= @restaurant.address %></p>
+        <p class="card-text"><strong>Catégorie :</strong> <%= @restaurant.category.capitalize %></p>
+        <p class="card-text"><strong>Phone Number :</strong> <%= @restaurant.phone_number %></p>
+      </div>
+      <div class="d-flex">
+        <%= link_to "Editer", edit_restaurant_path(@restaurant), class: "btn btn-outline-primary me-2" %>
+        <%= button_to "Supprimer", restaurant_path(@restaurant), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer ce restaurant ?" }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+  <!-- Section des avis -->
+  <div class="reviews-section mb-5">
+    <h2 class="text-primary">Avis</h2>
+    <% if @restaurant.reviews.any? %>
+      <% @restaurant.reviews.each do |review| %>
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+            <% if review.rating.present? %>
+              <!-- Afficher les étoiles remplies -->
+              <% review.rating.times do %>
+                <i class="fas fa-star text-warning"></i>
+              <% end %>
+              <!-- Afficher les étoiles vides -->
+              <% (5 - review.rating).times do %>
+                <i class="far fa-star text-warning"></i>
+              <% end %>
+            <% else %>
+              <span class="text-muted">Aucune note attribuée.</span>
+            <% end %>
+            <p class="mt-2 mb-0"><%= review.content %></p>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted mt-3">Aucun avis pour ce restaurant.</p>
+    <% end %>
+  </div>
+  <!-- Formulaire pour ajouter un avis -->
+  <div class="add-review-form">
+    <h3 class="text-primary">Ajouter un Avis</h3>
+    <div class="card shadow border-0 p-4 mt-3">
+      <%= simple_form_for [@restaurant, @review], html: { class: "form" } do |f| %>
+        <div class="mb-3">
+          <%= f.input :content, label: "Votre Avis", input_html: { class: "form-control", placeholder: "Partagez votre expérience..." } %>
+        </div>
+        <div class="mb-3">
+          <%= f.input :rating, label: "Note", collection: 1..5, prompt: "Choisissez une note", input_html: { class: "form-select" } %>
+        </div>
+        <%= f.button :submit, "Ajouter Avis", class: "btn btn-primary w-100" %>
+      <% end %>
+    </div>
+  </div>
+  <!-- Lien de retour -->
+  <div class="mt-4 text-center">
+    <%= link_to "Retour à la liste des restaurants", restaurants_path, class: "btn btn-secondary" %>
+  </div>
+</div>
